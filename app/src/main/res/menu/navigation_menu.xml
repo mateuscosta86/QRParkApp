@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/qrCode"
+    <item
+        android:id="@+id/qrCode"
+        android:icon="@mipmap/baseline_format_align_justify_black_24"
         android:title="QRCode" />
 
     <item android:id="@+id/perfil"
+        android:icon="@mipmap/baseline_person_black_24"
         android:title="Perfil" />
 
     <item android:id="@+id/relatorio"
+        android:icon="@mipmap/baseline_assignment_black_24"
     android:title="Relatorio" />
 
     <item android:id="@+id/logout"
+        android:icon="@mipmap/baseline_keyboard_arrow_left_black_24"
     android:title="Logout" />
 
 </menu>
