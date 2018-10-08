@@ -1,13 +1,19 @@
 package unipe.mateus.com.br.qrparkapp
 
+import android.content.Intent
+import android.content.SharedPreferences
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.support.design.widget.BottomNavigationView
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.view.MenuItem
+import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
+import unipe.mateus.com.br.helpers.Helper
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -28,12 +34,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         SetNavigationViewListener()
 
-        // Checar Manter Logado
+        if (!Helper.IsLoggedIn(applicationContext)) {
+            startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+            Toast.makeText(this, "Não está logado", Toast.LENGTH_LONG).show()
+        } else {
+            Toast.makeText(this, "Está logado", Toast.LENGTH_LONG).show()
+        }
 
-        // Se não estivar, inflar tela de login.
-
-        // Se estiver, mostrar QRPaga e mostrar QRCode
-
+        // TODO: Se der close na aplicação, verificar a variavel keepConnected,
+        // Se verdeira, não dá signout, se falso dar signout
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -41,6 +50,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when ( item.itemId ) {
             R.id.qrCode -> {
                 System.out.println("Clicked")
+            }
+            R.id.logout -> {
+                var auth = FirebaseAuth.getInstance()
+                auth.signOut()
+                PreferenceManager.getDefaultSharedPreferences(applicationContext).edit().clear().commit()
+                startActivity(Intent(this@MainActivity, LoginActivity::class.java))
             }
         }
 

@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "607173198309",
+    "firebase_url": "https://qrparkapp.firebaseio.com",
+    "project_id": "qrparkapp",
+    "storage_bucket": "qrparkapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:607173198309:android:4390f6cd96ced723",
+        "android_client_info": {
+          "package_name": "unipe.mateus.com.br.qrparkapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "607173198309-ee7rong7jamup5dcqt6k7on4r46o85el.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "unipe.mateus.com.br.qrparkapp",
+            "certificate_hash": "7d8e2399c98604ca60069243ff7d61906dee5173"
+          }
+        },
+        {
+          "client_id": "607173198309-rfnfcnllqin6bta17g24l5dg5sonenrn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7Ba4B-NC7K36GBa4EjQp5YBKc1wEJM-o"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "607173198309-rfnfcnllqin6bta17g24l5dg5sonenrn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
