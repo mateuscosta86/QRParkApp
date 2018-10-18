@@ -1,5 +1,6 @@
 package unipe.mateus.com.br.qrparkapp
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.preference.PreferenceManager
@@ -47,7 +48,7 @@ class LoginActivity : AppCompatActivity() {
             val editor = prefs.edit()
 
             if( (cbKeepConnect as CheckBox).isChecked ) {
-                Toast.makeText(this, "botao checado", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Checkbox ticked", Toast.LENGTH_LONG).show()
                 editor.putBoolean("keepConnected", true)
                 editor.commit()
             } else {
@@ -84,7 +85,8 @@ class LoginActivity : AppCompatActivity() {
 
         auth!!.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this) { task ->
             if ( task.isSuccessful ) {
-                Toast.makeText(this, "Logging in", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Logging succeeded", Toast.LENGTH_LONG).show()
+                startActivity(Intent(this@LoginActivity, RegisterActivity::class.java))
                 finish()
             } else if (task.isCanceled) {
                 System.out.println(task.exception)
@@ -96,6 +98,19 @@ class LoginActivity : AppCompatActivity() {
 
     fun UserLogin(email: String, password: String) {
 
+        if ( auth != null ) {
+            (auth as FirebaseAuth).signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+                if ( task.isSuccessful ) {
+                    Toast.makeText(this, "Logging in", Toast.LENGTH_LONG).show()
+                    startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                    finish()
+                } else if (task.isCanceled) {
+                    System.out.println(task.exception)
+                } else {
+                    Toast.makeText(this, "Oops! Something wrong happened.", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
     }
 
 

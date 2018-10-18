@@ -10,17 +10,18 @@ import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
+import android.util.Log
 import android.view.MenuItem
+import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
+import unipe.mateus.com.br.database.AuthManager
+import unipe.mateus.com.br.database.Database
 import unipe.mateus.com.br.helpers.Helper
+import unipe.mateus.com.br.model.User
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
-
-    private var drawerLayout : DrawerLayout? = null
-    private var toggle : ActionBarDrawerToggle? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -36,14 +37,30 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         if (!Helper.IsLoggedIn(applicationContext)) {
             startActivity(Intent(this@MainActivity, LoginActivity::class.java))
-            Toast.makeText(this, "Não está logado", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Not logged in", Toast.LENGTH_LONG).show()
+            finish()
         } else {
-            Toast.makeText(this, "Está logado", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Logged in", Toast.LENGTH_LONG).show()
+            Log.i("TESTE", "onCreate() Restoring previous state");
+            System.out.println(AuthManager.currentUser!!.uid)
+            var user : User = User("", "", "")
+            var nome = findViewById<TextView>(R.id.txtTestName)
+            Database.GetUserById(AuthManager.currentUser!!.uid) {
+                nome.text = it.name
+            }
+            System.out.println("User na main: $user")
+
+
         }
 
         // TODO: Se der close na aplicação, verificar a variavel keepConnected,
         // Se verdeira, não dá signout, se falso dar signout
+
     }
+
+    private var drawerLayout : DrawerLayout? = null
+    private var toggle : ActionBarDrawerToggle? = null
+
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
 

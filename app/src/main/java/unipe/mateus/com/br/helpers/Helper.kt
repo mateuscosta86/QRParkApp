@@ -5,15 +5,15 @@ import android.content.Intent
 import android.preference.PreferenceManager
 import android.support.v4.content.ContextCompat.startActivity
 import android.support.v7.app.AppCompatActivity
+import unipe.mateus.com.br.database.AuthManager
 
 
 class Helper {
     companion object {
         fun IsLoggedIn(context: Context) : Boolean {
             val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-            return prefs.getBoolean("keepConnected", false)
+            return prefs.getBoolean("keepConnected", false) || ( AuthManager.currentUser != null )
         }
-
 
     }
 }
