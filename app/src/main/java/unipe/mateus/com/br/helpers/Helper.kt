@@ -5,14 +5,21 @@ import android.content.Intent
 import android.preference.PreferenceManager
 import android.support.v4.content.ContextCompat.startActivity
 import android.support.v7.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
 import unipe.mateus.com.br.database.AuthManager
 
 
 class Helper {
     companion object {
-        fun IsLoggedIn(context: Context) : Boolean {
+        fun IsKeepLoggedChecked(context: Context) : Boolean {
             val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-            return prefs.getBoolean("keepConnected", false) || ( AuthManager.currentUser != null )
+
+
+            return prefs.getBoolean("keepConnected", false)
+        }
+
+        fun IsLoggedIn() : Boolean {
+            return FirebaseAuth.getInstance().currentUser != null
         }
 
     }

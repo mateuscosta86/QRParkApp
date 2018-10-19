@@ -36,11 +36,29 @@ class LoginActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
 
-        if ( Helper.IsLoggedIn(applicationContext) ) {
-            finish()
-        }
 
         (btnSignUp as Button).setOnClickListener {
+            val emailStr = (email as EditText).text.toString()
+            val passwordStr = (password as EditText).text.toString()
+
+            val prefs = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+            val editor = prefs.edit()
+
+            if( (cbKeepConnect as CheckBox).isChecked ) {
+                Toast.makeText(this, "Checkbox ticked", Toast.LENGTH_LONG).show()
+                editor.putBoolean("keepConnected", true)
+                editor.apply()
+            } else {
+                editor.putBoolean("keepConnected", false)
+                editor.apply()
+            }
+
+            if (!emailStr.isEmpty() && !passwordStr.isEmpty() ) {
+                CreateUserAndLogin(emailStr, passwordStr)
+            }
+        }
+
+        (btnSignIn as Button).setOnClickListener {
             val emailStr = (email as EditText).text.toString()
             val passwordStr = (password as EditText).text.toString()
 
@@ -55,15 +73,6 @@ class LoginActivity : AppCompatActivity() {
                 editor.putBoolean("keepConnected", false)
                 editor.commit()
             }
-
-            if (!emailStr.isEmpty() && !passwordStr.isEmpty() ) {
-                CreateUserAndLogin(emailStr, passwordStr)
-            }
-        }
-
-        (btnSignIn as Button).setOnClickListener {
-            val emailStr = (email as EditText).text.toString()
-            val passwordStr = (password as EditText).text.toString()
 
             if (!emailStr.isEmpty() && !passwordStr.isEmpty() ) {
 

@@ -15,6 +15,7 @@ import android.view.MenuItem
 import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import unipe.mateus.com.br.database.AuthManager
 import unipe.mateus.com.br.database.Database
 import unipe.mateus.com.br.helpers.Helper
@@ -22,6 +23,12 @@ import unipe.mateus.com.br.model.User
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+
+    private var drawerLayout : DrawerLayout? = null
+    private var toggle : ActionBarDrawerToggle? = null
+
+    private val user : FirebaseUser? = FirebaseAuth.getInstance().currentUser
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -33,34 +40,26 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         (toggle as ActionBarDrawerToggle).syncState()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         SetNavigationViewListener()
 
-        if (!Helper.IsLoggedIn(applicationContext)) {
+        if (user == null) {
             startActivity(Intent(this@MainActivity, LoginActivity::class.java))
             Toast.makeText(this, "Not logged in", Toast.LENGTH_LONG).show()
             finish()
         } else {
             Toast.makeText(this, "Logged in", Toast.LENGTH_LONG).show()
-            Log.i("TESTE", "onCreate() Restoring previous state");
-            System.out.println(AuthManager.currentUser!!.uid)
-            var user : User = User("", "", "")
-            var nome = findViewById<TextView>(R.id.txtTestName)
-            Database.GetUserById(AuthManager.currentUser!!.uid) {
-                nome.text = it.name
-            }
-            System.out.println("User na main: $user")
-
-
         }
-
-        // TODO: Se der close na aplicação, verificar a variavel keepConnected,
-        // Se verdeira, não dá signout, se falso dar signout
 
     }
 
-    private var drawerLayout : DrawerLayout? = null
-    private var toggle : ActionBarDrawerToggle? = null
-
+    override fun onStop() {
+        if (!Helper.IsKeepLoggedChecked(applicationContext) && user != null) {
+            FirebaseAuth.getInstance().signOut()
+            PreferenceManager.getDefaultSharedPreferences(applicationContext).edit().clear().apply()
+        }
+        super.onStop()
+    }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
 
@@ -68,10 +67,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.qrCode -> {
                 System.out.println("Clicked")
             }
+            R.id.relatorio -> {
+                startActivity(Intent(this@MainActivity, HistoryActivity::class.java))
+            }
             R.id.logout -> {
-                var auth = FirebaseAuth.getInstance()
-                auth.signOut()
-                PreferenceManager.getDefaultSharedPreferences(applicationContext).edit().clear().commit()
+                FirebaseAuth.getInstance().signOut()
+                PreferenceManager.getDefaultSharedPreferences(applicationContext).edit().clear().apply()
                 startActivity(Intent(this@MainActivity, LoginActivity::class.java))
             }
         }
@@ -93,7 +94,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return super.onOptionsItemSelected(item)
     }
 
-    private fun SetNavigationViewListener() : Unit {
+    private fun SetNavigationViewListener() {
         var navView : NavigationView = findViewById(R.id.navMenu)
         navView.setNavigationItemSelectedListener(this)
     }
