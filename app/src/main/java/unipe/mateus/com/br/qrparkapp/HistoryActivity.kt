@@ -1,9 +1,11 @@
 package unipe.mateus.com.br.qrparkapp
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.KeyEvent
 import unipe.mateus.com.br.Adapter.HistoryAdapter
 import unipe.mateus.com.br.model.ParkRecord
 
@@ -11,6 +13,7 @@ class HistoryActivity : AppCompatActivity() {
 
     var recyclerView : RecyclerView? = null
     var historyAdapter : HistoryAdapter? = null
+    var history = ArrayList<ParkRecord>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,23 +25,8 @@ class HistoryActivity : AppCompatActivity() {
         val layoutManager = LinearLayoutManager(this)
         (recyclerView as RecyclerView).layoutManager = layoutManager
 
-        var history = ArrayList<ParkRecord>()
-
-        history.add(ParkRecord("13hr", "14h", 4.0f))
-        history.add(ParkRecord("13hr", "14h", 4.0f))
-        history.add(ParkRecord("13hr", "14h", 4.0f))
-        history.add(ParkRecord("13hr", "14h", 4.0f))
-        history.add(ParkRecord("13hr", "14h", 4.0f))
-        history.add(ParkRecord("13hr", "14h", 4.0f))
-        history.add(ParkRecord("13hr", "14h", 4.0f))
-        history.add(ParkRecord("13hr", "14h", 4.0f))
-        history.add(ParkRecord("13hr", "14h", 4.0f))
-        history.add(ParkRecord("13hr", "14h", 4.0f))
-
-
         historyAdapter = HistoryAdapter(history)
 
         (recyclerView as RecyclerView).adapter = historyAdapter
-
     }
 }

@@ -6,10 +6,13 @@ class ParkRecord {
     var saida : String? = null
     var preco : Float? = null
 
-    constructor( entrada : String, saida : String, preco : Float ) {
+    constructor( entrada : String?, saida : String?, preco : Float ) {
         this.entrada = entrada
         this.saida = saida
         this.preco = preco
 
     }
+
+
+
 }

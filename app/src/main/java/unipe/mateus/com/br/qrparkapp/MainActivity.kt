@@ -16,6 +16,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.FirebaseDatabase
 import unipe.mateus.com.br.database.AuthManager
 import unipe.mateus.com.br.database.Database
 import unipe.mateus.com.br.helpers.Helper
@@ -40,6 +41,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         (toggle as ActionBarDrawerToggle).syncState()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true)
 
         SetNavigationViewListener()
 
@@ -65,7 +67,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         when ( item.itemId ) {
             R.id.qrCode -> {
-                System.out.println("Clicked")
+                startActivity(Intent(this@MainActivity, QRCodeActivity::class.java))
+            }
+            R.id.perfil -> {
+                startActivity(Intent(this@MainActivity, ProfileActivity::class.java))
             }
             R.id.relatorio -> {
                 startActivity(Intent(this@MainActivity, HistoryActivity::class.java))
@@ -74,6 +79,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 FirebaseAuth.getInstance().signOut()
                 PreferenceManager.getDefaultSharedPreferences(applicationContext).edit().clear().apply()
                 startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+                finish()
             }
         }
 

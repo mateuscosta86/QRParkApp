@@ -1,21 +1,61 @@
 package unipe.mateus.com.br.Adapter
 
 import android.content.Context
+import android.provider.ContactsContract
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import unipe.mateus.com.br.database.Routes
 import unipe.mateus.com.br.model.ParkRecord
 import unipe.mateus.com.br.qrparkapp.R
 
 class HistoryAdapter : RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder> {
 
-    var historySource : List<ParkRecord>
+    private val user : FirebaseUser? = FirebaseAuth.getInstance().currentUser
+    val historySource : List<ParkRecord>
 
-    constructor(source : List<ParkRecord>) {
+    constructor(source : ArrayList<ParkRecord>) {
         this.historySource = source
+
+        if ( user != null ) {
+            Routes.historyById(user.uid).addChildEventListener(object : ChildEventListener {
+
+                override fun onCancelled(p0: DatabaseError) {
+                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                }
+
+                override fun onChildMoved(p0: DataSnapshot, p1: String?) {
+                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                }
+
+                override fun onChildChanged(p0: DataSnapshot, p1: String?) {
+                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                }
+
+                override fun onChildAdded(p0: DataSnapshot, p1: String?) {
+
+                    var newRecord : ParkRecord = ParkRecord("", "", 4.0f)
+                    var obj = p0.value as HashMap<String, String>
+                    newRecord.entrada = obj["entrada"]
+                    newRecord.saida = obj["saida"]
+                    historySource.add(newRecord)
+                    notifyDataSetChanged()
+                }
+
+                override fun onChildRemoved(p0: DataSnapshot) {
+                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                }
+            })
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryViewHolder {
@@ -38,7 +78,6 @@ class HistoryAdapter : RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder> {
         holder.preco.text = "Preço: R$ " + String.format("%.2f", record.preco)
     }
 
-
     class HistoryViewHolder : RecyclerView.ViewHolder {
 
         val entrada : TextView
@@ -54,7 +93,5 @@ class HistoryAdapter : RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder> {
                 Toast.makeText(context, "Abrir localização", Toast.LENGTH_SHORT).show()
             }
         }
-
     }
-
 }
