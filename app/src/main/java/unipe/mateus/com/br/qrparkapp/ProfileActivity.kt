@@ -28,4 +28,11 @@ class ProfileActivity : AppCompatActivity() {
             }
         }
     }
+
+    override fun onStop() {
+        if ( user != null ) {
+            Database.RemoveGetUserListener(user.uid)
+        }
+        super.onStop()
+    }
 }

@@ -15,7 +15,8 @@ class Database {
     companion object {
 
         var exitListener: ValueEventListener? = null
-
+        var getUserListener: ValueEventListener? = null
+        var parkingStatusListener: ValueEventListener? = null
 
         fun CreateUser(user: User): Unit {
 
@@ -30,7 +31,8 @@ class Database {
 
             var user = User("", "", "")
 
-            Routes.userWithId(id).addValueEventListener(object : ValueEventListener {
+            getUserListener = object : ValueEventListener {
+
                 override fun onCancelled(p0: DatabaseError) {
                     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
                 }
@@ -48,7 +50,8 @@ class Database {
                     var status = data["isParked"].toString().toBoolean()
                     completionBlock(user, status)
                 }
-            })
+            }
+            Routes.userWithId(id).addValueEventListener( getUserListener as ValueEventListener)
         }
 
         fun GetParkingStatusById(id: String, completionBlock: (situation: Boolean) -> Unit) {
@@ -104,7 +107,6 @@ class Database {
 
                 override fun onDataChange(p0: DataSnapshot) {
                     if (p0.key == "saida") {
-                        System.out.println("CHAMADA NUMERO: " + Calendar.getInstance().get(Calendar.MILLISECOND))
                         completionBlock(p0.value.toString())
                     }
                 }
@@ -114,6 +116,10 @@ class Database {
 
         fun RemoveExitListener(id: String) {
             Routes.lastExitById(id).removeEventListener(exitListener as ValueEventListener)
+        }
+
+        fun RemoveGetUserListener(id: String) {
+            Routes.userWithId(id).removeEventListener(getUserListener as ValueEventListener)
         }
     }
 }

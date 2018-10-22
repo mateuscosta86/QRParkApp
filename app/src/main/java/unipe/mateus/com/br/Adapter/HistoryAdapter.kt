@@ -22,12 +22,15 @@ class HistoryAdapter : RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder> {
 
     private val user : FirebaseUser? = FirebaseAuth.getInstance().currentUser
     val historySource : List<ParkRecord>
+    var historyListener : ChildEventListener? = null
 
     constructor(source : ArrayList<ParkRecord>) {
         this.historySource = source
 
         if ( user != null ) {
-            Routes.historyById(user.uid).addChildEventListener(object : ChildEventListener {
+
+
+            historyListener = object : ChildEventListener {
 
                 override fun onCancelled(p0: DatabaseError) {
                     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -54,7 +57,8 @@ class HistoryAdapter : RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder> {
                 override fun onChildRemoved(p0: DataSnapshot) {
                     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
                 }
-            })
+            }
+            Routes.historyById(user.uid).addChildEventListener(historyListener as ChildEventListener)
         }
     }
 
@@ -76,6 +80,12 @@ class HistoryAdapter : RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder> {
         holder.entrada.text = "Hora da entrada: "  + record.entrada
         holder.saida.text = "Hora da saída: " + record.saida
         holder.preco.text = "Preço: R$ " + String.format("%.2f", record.preco)
+    }
+
+    fun RemoveHistoryListener(id : String) {
+        if ( user != null ) {
+            Routes.historyById(user.uid).removeEventListener(historyListener as ChildEventListener)
+        }
     }
 
     class HistoryViewHolder : RecyclerView.ViewHolder {

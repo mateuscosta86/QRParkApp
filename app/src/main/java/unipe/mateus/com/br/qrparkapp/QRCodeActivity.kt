@@ -26,8 +26,6 @@ class QRCodeActivity : AppCompatActivity() {
         var isParked = false
         val codeImage = ivCode
 
-        System.out.println("IS INITIALIZING: " + isInitializing)
-
         if ( user != null ) {
 
             Database.GetUserById(user.uid) { usr, status ->
@@ -44,7 +42,6 @@ class QRCodeActivity : AppCompatActivity() {
             Database.getExitById(user.uid ) {
                 if (isInitializing) {
                     isInitializing = false
-                    System.out.println("IS INITIALIZING: " + isInitializing)
                 } else {
                     parkRecord.saida = it
                     Database.feedHistory(user.uid, parkRecord)
@@ -66,6 +63,7 @@ class QRCodeActivity : AppCompatActivity() {
     override fun onStop() {
         if ( user != null ){
             Database.RemoveExitListener(user.uid)
+            Database.RemoveGetUserListener(user.uid)
         }
         super.onStop()
     }

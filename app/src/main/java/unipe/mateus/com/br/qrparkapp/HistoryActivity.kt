@@ -1,11 +1,11 @@
 package unipe.mateus.com.br.qrparkapp
 
-import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.KeyEvent
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import unipe.mateus.com.br.Adapter.HistoryAdapter
 import unipe.mateus.com.br.model.ParkRecord
 
@@ -15,6 +15,7 @@ class HistoryActivity : AppCompatActivity() {
     var historyAdapter : HistoryAdapter? = null
     var history = ArrayList<ParkRecord>()
 
+    private val user : FirebaseUser? = FirebaseAuth.getInstance().currentUser
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,5 +29,13 @@ class HistoryActivity : AppCompatActivity() {
         historyAdapter = HistoryAdapter(history)
 
         (recyclerView as RecyclerView).adapter = historyAdapter
+    }
+
+    override fun onStop() {
+
+        if (historyAdapter != null && user != null ){
+            (historyAdapter as HistoryAdapter).RemoveHistoryListener(user.uid)
+        }
+        super.onStop()
     }
 }
