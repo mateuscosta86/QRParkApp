@@ -29,6 +29,7 @@ class HistoryActivity : AppCompatActivity() {
         historyAdapter = HistoryAdapter(history)
 
         (recyclerView as RecyclerView).adapter = historyAdapter
+        (historyAdapter as HistoryAdapter).notifyDataSetChanged()
     }
 
     override fun onStop() {

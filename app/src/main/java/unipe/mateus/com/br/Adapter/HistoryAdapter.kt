@@ -29,7 +29,6 @@ class HistoryAdapter : RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder> {
 
         if ( user != null ) {
 
-
             historyListener = object : ChildEventListener {
 
                 override fun onCancelled(p0: DatabaseError) {

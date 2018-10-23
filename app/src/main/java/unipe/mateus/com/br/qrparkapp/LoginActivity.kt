@@ -11,6 +11,7 @@ import android.widget.Toast
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_login.*
 import unipe.mateus.com.br.helpers.Helper
 
@@ -55,6 +56,8 @@ class LoginActivity : AppCompatActivity() {
 
             if (!emailStr.isEmpty() && !passwordStr.isEmpty() ) {
                 CreateUserAndLogin(emailStr, passwordStr)
+            } else {
+                Toast.makeText(this, "Campos de email ou password vazios.", Toast.LENGTH_LONG).show()
             }
         }
 
@@ -77,6 +80,8 @@ class LoginActivity : AppCompatActivity() {
             if (!emailStr.isEmpty() && !passwordStr.isEmpty() ) {
 
                 UserLogin(emailStr, passwordStr)
+            } else {
+                Toast.makeText(this, "Campos de email ou password vazios.", Toast.LENGTH_LONG).show()
             }
         }
 

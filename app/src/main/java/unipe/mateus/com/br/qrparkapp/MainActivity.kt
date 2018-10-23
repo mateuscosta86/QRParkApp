@@ -39,9 +39,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         (drawerLayout as DrawerLayout).addDrawerListener(toggle as ActionBarDrawerToggle)
 
-        (toggle as ActionBarDrawerToggle).syncState()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true)
+        (toggle as ActionBarDrawerToggle).syncState()
 
         SetNavigationViewListener()
 
@@ -77,7 +76,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.logout -> {
                 FirebaseAuth.getInstance().signOut()
+
                 PreferenceManager.getDefaultSharedPreferences(applicationContext).edit().clear().apply()
+
                 startActivity(Intent(this@MainActivity, LoginActivity::class.java))
                 finish()
             }

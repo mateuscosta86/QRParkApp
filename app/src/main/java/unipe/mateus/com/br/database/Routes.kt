@@ -1,18 +1,23 @@
 package unipe.mateus.com.br.database
 
-import android.content.Context
-import android.preference.PreferenceManager
-import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
 class Routes {
     companion object {
-        private val baseRef : DatabaseReference = FirebaseDatabase.getInstance().reference
+        private var dataBase : FirebaseDatabase? = null
+
+        fun GetBaseRef() : DatabaseReference {
+            if ( dataBase == null ) {
+                dataBase = FirebaseDatabase.getInstance()
+                (dataBase as FirebaseDatabase).setPersistenceEnabled(true)
+            }
+            return (dataBase as FirebaseDatabase).reference
+        }
 
         fun users() : DatabaseReference {
 
-            return baseRef.child("users")
+            return GetBaseRef().child("users")
         }
 
         fun statusById(id : String) : DatabaseReference{
@@ -29,7 +34,7 @@ class Routes {
         }
 
         fun historyById(uid : String ) : DatabaseReference {
-            return  baseRef.child("registros").child(uid)
+            return  GetBaseRef().child("registros").child(uid)
         }
 
         fun entry(uid: String) : DatabaseReference {

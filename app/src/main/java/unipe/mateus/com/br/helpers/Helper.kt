@@ -13,14 +13,7 @@ class Helper {
     companion object {
         fun IsKeepLoggedChecked(context: Context) : Boolean {
             val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-
-
             return prefs.getBoolean("keepConnected", false)
         }
-
-        fun IsLoggedIn() : Boolean {
-            return FirebaseAuth.getInstance().currentUser != null
-        }
-
     }
 }
