@@ -1,26 +1,19 @@
 package unipe.mateus.com.br.qrparkapp
 
 import android.content.Intent
-import android.content.SharedPreferences
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.support.design.widget.BottomNavigationView
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.util.Log
 import android.view.MenuItem
-import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.FirebaseDatabase
-import unipe.mateus.com.br.database.AuthManager
-import unipe.mateus.com.br.database.Database
 import unipe.mateus.com.br.helpers.Helper
-import unipe.mateus.com.br.model.User
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -44,6 +37,26 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         SetNavigationViewListener()
 
+        var lastProcessID = PreferenceManager.getDefaultSharedPreferences(applicationContext).getInt("PROCESS_ID", 0)
+        Log.i("CARAIO", lastProcessID.toString())
+
+        var editor = PreferenceManager.getDefaultSharedPreferences(applicationContext).edit()
+        editor.putInt( "PROCESS_ID", android.os.Process.myPid() ).apply()
+
+        var currentProcessID = PreferenceManager.getDefaultSharedPreferences(applicationContext).getInt("PROCESS_ID", 0)
+
+        Log.i("CARAIO", currentProcessID.toString())
+
+        if (currentProcessID != lastProcessID && lastProcessID != 0 ) {
+            if (!Helper.IsKeepLoggedChecked(applicationContext) && user != null) {
+                FirebaseAuth.getInstance().signOut()
+                PreferenceManager.getDefaultSharedPreferences(applicationContext).edit().clear().apply()
+                startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+                Toast.makeText(this, "Not logged in", Toast.LENGTH_LONG).show()
+                finish()
+            }
+        }
+
         if (user == null) {
             startActivity(Intent(this@MainActivity, LoginActivity::class.java))
             Toast.makeText(this, "Not logged in", Toast.LENGTH_LONG).show()
@@ -52,14 +65,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             Toast.makeText(this, "Logged in", Toast.LENGTH_LONG).show()
         }
 
-    }
-
-    override fun onStop() {
-        if (!Helper.IsKeepLoggedChecked(applicationContext) && user != null) {
-            FirebaseAuth.getInstance().signOut()
-            PreferenceManager.getDefaultSharedPreferences(applicationContext).edit().clear().apply()
-        }
-        super.onStop()
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -76,9 +81,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.logout -> {
                 FirebaseAuth.getInstance().signOut()
-
                 PreferenceManager.getDefaultSharedPreferences(applicationContext).edit().clear().apply()
-
                 startActivity(Intent(this@MainActivity, LoginActivity::class.java))
                 finish()
             }
