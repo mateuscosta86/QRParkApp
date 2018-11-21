@@ -38,7 +38,7 @@ class RegisterActivity : AppCompatActivity() {
 
                     var newUser = User(currentUser.uid, nameString, lastNameString)
                     Database.CreateUser(newUser)
-                    startActivity(Intent(this@RegisterActivity, MainActivity::class.java))
+                    startActivity(Intent(this@RegisterActivity, MapsActivity::class.java))
                     finish()
                 } else {
                     Toast.makeText(this, "Campos de nome ou sobrenome vazios.", Toast.LENGTH_LONG).show()

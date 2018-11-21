@@ -116,7 +116,7 @@ class LoginActivity : AppCompatActivity() {
             (auth as FirebaseAuth).signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
                 if ( task.isSuccessful ) {
                     Toast.makeText(this, "Logging in", Toast.LENGTH_LONG).show()
-                    startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                    startActivity(Intent(this@LoginActivity, MapsActivity::class.java))
                     finish()
                 } else if (task.isCanceled) {
                     System.out.println(task.exception)
